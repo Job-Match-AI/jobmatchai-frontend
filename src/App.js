@@ -7,10 +7,12 @@ function App() {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:8000";
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/match", {
+      const res = await fetch(`${backendUrl}/match`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resume, jd }),
@@ -35,7 +37,6 @@ function App() {
       🔍 Missing Keywords: ${data.missingKeywords.map((kw) => `- ${kw}`).join("\n")}
       💡 Suggestions: ${data.suggestions.map((s) => `- ${s}`).join("\n")}
       `;
-
 
       setOutput(formatted || "No result returned");
     } catch (err) {
@@ -83,7 +84,15 @@ function App() {
       </button>
 
       {output && (
-        <div style={{ marginTop: "2rem", whiteSpace: "pre-wrap", backgroundColor: "#f9f9f9", padding: "1rem", borderRadius: "5px" }}>
+        <div
+          style={{
+            marginTop: "2rem",
+            whiteSpace: "pre-wrap",
+            backgroundColor: "#f9f9f9",
+            padding: "1rem",
+            borderRadius: "5px",
+          }}
+        >
           <h3>🧾 Match Result</h3>
           <p>{output}</p>
         </div>
